@@ -20,7 +20,15 @@ public:
 protected:
 
 	UPROPERTY(VisibleAnywhere)
-	USceneComponent* SceneC;
+	USceneComponent* SceneC1;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* SceneC2;
+
+	UPROPERTY(VisibleAnywhere)
+	USceneComponent* SceneC3;
+
+
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
