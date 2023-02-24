@@ -30,6 +30,7 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UParticleSystemComponent* EffectComp;
 
+	//int32 CallTracker = 3;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
@@ -37,5 +38,9 @@ protected:
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
+
+	void TimerFunction();
+
+	FTimerHandle TimerHandle;
 
 };

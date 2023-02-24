@@ -4,35 +4,23 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
-#include "SExplosive.generated.h"
+#include "SSpawner.generated.h"
 
-class UMeshComponent;
-//class URadialForceComponent;
+class USceneComponent;
 
 UCLASS()
-class ARTHURFIUZACPROJECT_API ASExplosive : public AActor
+class ARTHURFIUZACPROJECT_API ASSpawner : public AActor
 {
 	GENERATED_BODY()
 	
-public:
+public:	
 	// Sets default values for this actor's properties
-	ASExplosive();
+	ASSpawner();
 
 protected:
 
 	UPROPERTY(VisibleAnywhere)
-	UMeshComponent* MeshComp;
-
-	/*
-	UPROPERTY(VisibleAnywhere)
-	URadialForceComponent* RadialForce;
-	*/
-
-
-
-	UFUNCTION()
-	void AOnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, FVector NormalImpulse, const FHitResult& Hit);
-	
+	USceneComponent* SceneC;
 
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;

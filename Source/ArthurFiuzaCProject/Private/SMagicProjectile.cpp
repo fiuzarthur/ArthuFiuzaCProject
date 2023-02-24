@@ -31,6 +31,8 @@ ASMagicProjectile::ASMagicProjectile()
 void ASMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
+
+	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASMagicProjectile::TimerFunction, 10.0f, false, 10.0f);
 	
 }
 
@@ -40,4 +42,10 @@ void ASMagicProjectile::Tick(float DeltaTime)
 	Super::Tick(DeltaTime);
 
 }
+
+void ASMagicProjectile::TimerFunction()
+{
+	this->Destroy();
+}
+
 

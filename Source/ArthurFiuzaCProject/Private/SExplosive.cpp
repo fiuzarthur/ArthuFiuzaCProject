@@ -17,10 +17,11 @@ ASExplosive::ASExplosive()
 	MeshComp->SetCollisionObjectType(ECC_PhysicsBody);
 	RootComponent = MeshComp;
 
+	/*
 	RadialForce = CreateDefaultSubobject<URadialForceComponent>("RadialForce");
 	RadialForce->Radius = 500;
 	RadialForce->SetupAttachment(MeshComp);
-
+	*/
 
 
 }
@@ -29,10 +30,13 @@ void ASExplosive::AOnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 {
 	if(OtherActor->ActorHasTag("Projectile"))
 	{
+		/*
 		RadialForce->ImpulseStrength = 2000;
 		RadialForce->bImpulseVelChange = true;
 		RadialForce->FireImpulse();
+		*/
 
+		OtherActor->Destroy();
 		this->Destroy();
 	}
 
