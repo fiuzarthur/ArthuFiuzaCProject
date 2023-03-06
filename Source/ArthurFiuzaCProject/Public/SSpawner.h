@@ -4,9 +4,12 @@
 
 #include "CoreMinimal.h"
 #include "GameFramework/Actor.h"
+#include "Kismet/GameplayStatics.h"
 #include "SSpawner.generated.h"
 
+
 class USceneComponent;
+class UTextRenderComponent;
 
 UCLASS()
 class ARTHURFIUZACPROJECT_API ASSpawner : public AActor
@@ -19,6 +22,25 @@ public:
 
 protected:
 
+	float SpawnTimer;
+	float TimeToSpawn;
+	int GameTimer;
+	int BarrelNum;
+	int BarrelType;
+
+	UPROPERTY(EditAnywhere)
+	int TimeMax = 100;
+
+	FTimerHandle timeHandler;
+
+	bool Spawning;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AActor> ExplosiveB;
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<AActor> NormalB;
+
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* SceneC1;
 
@@ -28,6 +50,8 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USceneComponent* SceneC3;
 
+	UPROPERTY(VisibleAnywhere)
+	UTextRenderComponent* TextRender;
 
 
 	// Called when the game starts or when spawned
@@ -37,4 +61,6 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	UFUNCTION()
+	void UpdateTime();
 };
