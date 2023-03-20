@@ -23,6 +23,10 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	UMeshComponent* MeshComp;
 
+	UPROPERTY(BlueprintReadWrite, meta = (AllowPrivateAccess = "true"))
+		bool destroyByPlayer = false;
+
+
 	/*
 	UPROPERTY(VisibleAnywhere)
 	URadialForceComponent* RadialForce;

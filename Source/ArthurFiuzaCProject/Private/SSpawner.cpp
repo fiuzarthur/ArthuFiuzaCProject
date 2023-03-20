@@ -74,7 +74,7 @@ void ASSpawner::Tick(float DeltaTime)
 
 			FActorSpawnParameters SpawnParams;
 
-			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+			SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::DontSpawnIfColliding;
 			if(BarrelType == 0)
 			{
 				GetWorld()->SpawnActor<AActor>(NormalB, SpawnTM, SpawnParams);
@@ -92,7 +92,7 @@ void ASSpawner::Tick(float DeltaTime)
 void ASSpawner::UpdateTime()
 {
 	GameTimer--;
-	TextRender->SetText(FString::FromInt(GameTimer) + " segundos");
+	TextRender->SetText(FString::FromInt(GameTimer) + " seconds");
 
 	if (GameTimer == 0)
 	{

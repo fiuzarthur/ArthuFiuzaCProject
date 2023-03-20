@@ -35,8 +35,7 @@ void ASExplosive::AOnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 		RadialForce->bImpulseVelChange = true;
 		RadialForce->FireImpulse();
 		*/
-
-		OtherActor->Destroy();
+		destroyByPlayer = true;
 		this->Destroy();
 	}
 
