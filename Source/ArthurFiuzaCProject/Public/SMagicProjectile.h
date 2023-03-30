@@ -21,14 +21,26 @@ public:
 
 protected:
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UParticleSystem* ImpactVFX;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Components")
 	USphereComponent* SphereComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UProjectileMovementComponent* MovementComp;
 
-	UPROPERTY(VisibleAnywhere, BlueprintReadOnly)
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UParticleSystemComponent* EffectComp;
+	
+	UFUNCTION()
+	void OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
+	//UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
+	//void Explode();
+
+	//virtual void PostInitializateComponents() override;
 
 	//int32 CallTracker = 3;
 

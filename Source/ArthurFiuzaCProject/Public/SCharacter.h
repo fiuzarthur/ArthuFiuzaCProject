@@ -10,6 +10,7 @@ class UCameraComponent;
 class USpringArmComponent;
 class USInteractionComponent;
 class UAnimMontage;
+class USAttributeComponent;
 
 UCLASS()
 class ARTHURFIUZACPROJECT_API ASCharacter : public ACharacter
@@ -21,10 +22,20 @@ protected:
 	TSubclassOf<AActor> ProjectileClass;
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> UltimateClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
+	TSubclassOf<AActor> ProjectileTPClass;
+
+	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnim;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 
+	FVector CamLocation;
+	FRotator CamRotation;
+	FVector CamEnd;
+	FVector CamPoint;
 
 
 public:
@@ -42,6 +53,9 @@ protected:
 	UPROPERTY(VisibleAnywhere)
 	USInteractionComponent* InteractionComp;
 
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Componets")
+	USAttributeComponent* AttributeComp;
+
 	// Called when the game starts or when spawned
 	virtual void BeginPlay() override;
 
@@ -49,13 +63,27 @@ protected:
 
 	void MoveRight(float Value);
 
+	void setTarget();
+
 	void PrimaryAttack();
 
 	void PrimaryInteract();
 
 	void PrimaryAttack_TimeElapsed();
 
+	void UltimateAttack();
+
+	void UltimateAttack_TimeElapsed();
+
+	void TeleportAttack();
+
+	void TeleportAttack_TimeElapsed();
+
 	void PlayerJump();
+
+
+
+
 public:	
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;

@@ -4,6 +4,7 @@
 #include "SExplosive.h"
 #include <PhysicsEngine/RadialForceComponent.h>
 #include "Kismet/GameplayStatics.h"
+#include "DrawDebugHelpers.h"
 
 // Sets default values
 ASExplosive::ASExplosive()
@@ -35,10 +36,23 @@ void ASExplosive::AOnActorHit(UPrimitiveComponent* HitComponent, AActor* OtherAc
 		RadialForce->bImpulseVelChange = true;
 		RadialForce->FireImpulse();
 		*/
+
 		destroyByPlayer = true;
 		this->Destroy();
+
+		//debug
+		//UE_LOG(LogTemp, Log, TEXT("OnActorHit ActorHasTag -Projectile- Explosive Barrel "))
+
 	}
 
+	//%s = string
+	//%f = float
+	// logs: "OtherActor: MyActor_1, at game time: 124.4"
+
+	//debug
+	//UE_LOG(LogTemp, Warning, TEXT("OtherActor: %s, at game time: %f"), *GetNameSafe(OtherActor), GetWorld()->TimeSeconds);
+	//FString CombinedString = FString::Printf(TEXT("Hit at location: %s"), *Hit.ImpactPoint.ToString());
+	//DrawDebugString(GetWorld(), Hit.ImpactPoint, CombinedString, nullptr, FColor::Green, 2.0f, true);
 }
 
 
@@ -48,7 +62,6 @@ void ASExplosive::BeginPlay()
 	Super::BeginPlay();
 	
 }
-
 
 // Called every frame
 void ASExplosive::Tick(float DeltaTime)
