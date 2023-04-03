@@ -11,6 +11,7 @@ class USpringArmComponent;
 class USInteractionComponent;
 class UAnimMontage;
 class USAttributeComponent;
+class UParticleSystemComponent;
 
 UCLASS()
 class ARTHURFIUZACPROJECT_API ASCharacter : public ACharacter
@@ -29,6 +30,9 @@ protected:
 
 	UPROPERTY(EditAnywhere, Category = "Attack")
 	UAnimMontage* AttackAnim;
+
+	UPROPERTY(EditDefaultsOnly, Category = "Effects")
+	UParticleSystem* ImpactVFX;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 
@@ -65,6 +69,8 @@ protected:
 
 	void setTarget();
 
+	void SpawnProjectile(TSubclassOf<AActor> ClassToSpawn);
+
 	void PrimaryAttack();
 
 	void PrimaryInteract();
@@ -78,6 +84,8 @@ protected:
 	void TeleportAttack();
 
 	void TeleportAttack_TimeElapsed();
+
+	void TeleportPortal();
 
 	void PlayerJump();
 

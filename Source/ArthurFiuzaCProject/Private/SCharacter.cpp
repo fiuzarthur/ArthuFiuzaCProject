@@ -8,6 +8,7 @@
 #include "GameFramework/CharacterMovementComponent.h"
 #include "GameFramework/SpringArmComponent.h"
 #include "SAttributeComponent.h"
+#include <Kismet/GameplayStatics.h>
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -103,8 +104,40 @@ void ASCharacter::setTarget()
 
 	//debug
 	//DrawDebugLine(GetWorld(), CamLocation, CamEnd, FColor::Purple , false, 2.0f, 0, 2.0f);
-	//DrawDebugSphere(GetWorld(), hit.ImpactPoint, 30.0f, 32, FColor::Purple, false, 2.0f);
+	DrawDebugSphere(GetWorld(), hit.ImpactPoint, 30.0f, 32, FColor::Purple, false, 2.0f);
 
+}
+
+void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
+{
+	if (ensure(ClassToSpawn))
+	{
+		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+
+		FActorSpawnParameters SpawnParams;
+		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
+		SpawnParams.Instigator = this;
+
+		FCollisionShape Shape;
+		Shape.SetSphere(20.0f);
+
+		FCollisionQueryParams Params;
+		Params.AddIgnoredActor(this);
+
+// 		FCollisionObjectQueryParams ObjParams;
+// 		ObjParams.AddObjectTypesToQuery(ECC_WorldDynamic);
+// 		ObjParams.AddObjectTypesToQuery(ECC_WorldStatic);
+// 		ObjParams.AddObjectTypesToQuery(ECC_Pawn);
+
+		FRotator ProjDir = (CamPoint - HandLocation).Rotation();
+
+		FTransform SpawnTM = FTransform(ProjDir, HandLocation);
+
+		
+
+
+		GetWorld()->SpawnActor<AActor>(ClassToSpawn, SpawnTM, SpawnParams);
+	}
 }
 
 void ASCharacter::PrimaryAttack()
@@ -123,22 +156,7 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
-
-	if(ensure(ProjectileClass))
-	{
-		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-
-		FRotator ProjDir = (CamPoint - HandLocation).Rotation();
-
-		FTransform SpawnTM = FTransform(ProjDir, HandLocation);
-
-		FActorSpawnParameters SpawnParams;
-		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-		SpawnParams.Instigator = this;
-
-
-		GetWorld()->SpawnActor<AActor>(ProjectileClass, SpawnTM, SpawnParams);
-	}
+	SpawnProjectile(ProjectileClass);
 }
 
 
@@ -156,27 +174,29 @@ void ASCharacter::UltimateAttack()
 void ASCharacter::UltimateAttack_TimeElapsed()
 {
 
-	FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
-
-	FRotator ProjDir = (CamPoint - HandLocation).Rotation();
-
-	FTransform SpawnTM = FTransform(ProjDir, HandLocation);
-
-	FActorSpawnParameters SpawnParams;
-	SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
-	SpawnParams.Instigator = this;
-
-
-	GetWorld()->SpawnActor<AActor>(UltimateClass, SpawnTM, SpawnParams);
+	SpawnProjectile(UltimateClass);
 }
 
 
 void ASCharacter::TeleportAttack()
 {
+	PlayAnimMontage(AttackAnim);
+
+	setTarget();
+
+	//Spawn projectile function
+	GetWorldTimerManager().SetTimer(TimerHandle_PrimaryAttack, this, &ASCharacter::TeleportAttack_TimeElapsed, 0.2f);
 
 }
 
 void ASCharacter::TeleportAttack_TimeElapsed()
+{
+
+	UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
+	SpawnProjectile(ProjectileTPClass);
+}
+
+void ASCharacter::TeleportPortal()
 {
 
 }
@@ -204,7 +224,7 @@ void ASCharacter::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAction("UltimateAttack", IE_Pressed, this, &ASCharacter::UltimateAttack);
 	
-	//PlayerInputComponent->BindAction("UltimateAttack", IE_Pressed, this, &ASCharacter::UltimateAttack);
+	PlayerInputComponent->BindAction("TeleportAttack", IE_Pressed, this, &ASCharacter::TeleportAttack);
 
 
 	PlayerInputComponent->BindAction("PlayerJump", IE_Pressed, this, &ASCharacter::PlayerJump);
