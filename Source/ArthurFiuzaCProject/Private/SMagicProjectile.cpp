@@ -37,7 +37,7 @@ void ASMagicProjectile::OnActorOverlap(UPrimitiveComponent* OverlappedComponent,
 			USAttributeComponent* AttributeComp = Cast<USAttributeComponent>(OtherActor->GetComponentByClass(USAttributeComponent::StaticClass()));
 			if (AttributeComp)
 			{
-				AttributeComp->ApplyHealthChange(-20.0f);
+				AttributeComp->ApplyHealthChange(DamageAmount);
 				Destroy();
 			}
 	}
@@ -48,7 +48,11 @@ void ASMagicProjectile::BeginPlay()
 {
 	Super::BeginPlay();
 
+	DamageAmount *= -1;
 
+// 	if (ensure(TraceLoopSound))
+// 	{
+// 	}
 
 	GetWorldTimerManager().SetTimer(TimerHandle, this, &ASMagicProjectile::TimerFunction, 10.0f, false, 10.0f);
 	

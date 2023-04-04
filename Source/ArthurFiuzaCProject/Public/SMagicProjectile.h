@@ -9,6 +9,7 @@
 class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
+class UAudioComponent;
 
 UCLASS()
 class ARTHURFIUZACPROJECT_API ASMagicProjectile : public AActor
@@ -24,6 +25,15 @@ protected:
 	
 	UPROPERTY(EditAnywhere, Category = "Effects")
 	UParticleSystem* ImpactVFX;
+
+	UPROPERTY(EditAnywhere, Category = "Damage")
+	float DamageAmount = 0;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UAudioComponent* TraceLoopSound;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UAudioComponent* ImpactSound;
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Components")
 	USphereComponent* SphereComp;
