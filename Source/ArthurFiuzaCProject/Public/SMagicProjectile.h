@@ -10,7 +10,7 @@ class USphereComponent;
 class UProjectileMovementComponent;
 class UParticleSystemComponent;
 class UAudioComponent;
-
+class USoundCue;
 UCLASS()
 class ARTHURFIUZACPROJECT_API ASMagicProjectile : public AActor
 {
@@ -30,11 +30,11 @@ protected:
 	float DamageAmount = 0;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
-	UAudioComponent* TraceLoopSound;
+	USoundCue* TraceLoopSound;
 
 	UPROPERTY(EditAnywhere, Category = "Effects")
-	UAudioComponent* ImpactSound;
-
+	USoundCue* ImpactSound;
+		
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly,Category = "Components")
 	USphereComponent* SphereComp;
 
@@ -43,6 +43,9 @@ protected:
 
 	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
 	UParticleSystemComponent* EffectComp;
+
+	UPROPERTY(VisibleAnywhere, BlueprintReadOnly, Category = "Components")
+	UAudioComponent* AudioComp;
 	
 	UFUNCTION()
 	void OnActorOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
@@ -50,7 +53,9 @@ protected:
 	//UFUNCTION(BlueprintCallable,BlueprintNativeEvent)
 	//void Explode();
 
-	//virtual void PostInitializateComponents() override;
+	virtual void PostInitializeComponents() override;
+
+	virtual void Destroyed() override;
 
 	//int32 CallTracker = 3;
 

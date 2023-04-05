@@ -32,7 +32,19 @@ protected:
 	UAnimMontage* AttackAnim;
 
 	UPROPERTY(EditDefaultsOnly, Category = "Effects")
-	UParticleSystem* ImpactVFX;
+	UParticleSystem* PortalVFX;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UParticleSystem* CastBaseVFX;
+
+	UPROPERTY(EditAnywhere, Category = "Effects")
+	UParticleSystem* CastUltVFX;
+
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	FName HandSocketName;
+
+	UPROPERTY(VisibleAnywhere, Category = "Effects")
+	FName PelvisSocketName;
 
 	FTimerHandle TimerHandle_PrimaryAttack;
 
@@ -41,6 +53,11 @@ protected:
 	FVector CamEnd;
 	FVector CamPoint;
 
+	UPROPERTY(EditAnywhere, Category = "ColorFlash")
+	FVector Damage;
+
+	UPROPERTY(EditAnywhere, Category = "ColorFlash")
+	FVector Heal;
 
 public:
 	// Sets default values for this character's properties

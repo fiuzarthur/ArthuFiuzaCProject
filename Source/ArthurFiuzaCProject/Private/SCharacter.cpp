@@ -9,6 +9,7 @@
 #include "GameFramework/SpringArmComponent.h"
 #include "SAttributeComponent.h"
 #include <Kismet/GameplayStatics.h>
+#include <UObject/NoExportTypes.h>
 
 // Sets default values
 ASCharacter::ASCharacter()
@@ -30,6 +31,9 @@ ASCharacter::ASCharacter()
 	GetCharacterMovement()->bOrientRotationToMovement = true;
 
 	bUseControllerRotationYaw = false;
+
+	HandSocketName = "Muzzle_01";
+	PelvisSocketName = "Pelvis_01";
 
 }
 
@@ -121,7 +125,7 @@ void ASCharacter::SpawnProjectile(TSubclassOf<AActor> ClassToSpawn)
 {
 	if (ensure(ClassToSpawn))
 	{
-		FVector HandLocation = GetMesh()->GetSocketLocation("Muzzle_01");
+		FVector HandLocation = GetMesh()->GetSocketLocation(HandSocketName);
 
 		FActorSpawnParameters SpawnParams;
 		SpawnParams.SpawnCollisionHandlingOverride = ESpawnActorCollisionHandlingMethod::AlwaysSpawn;
@@ -165,6 +169,8 @@ void ASCharacter::PrimaryAttack()
 
 void ASCharacter::PrimaryAttack_TimeElapsed()
 {
+	UGameplayStatics::SpawnEmitterAttached(CastBaseVFX, GetMesh(), NAME_None, GetMesh()->GetSocketLocation(HandSocketName), GetMesh()->GetSocketRotation(HandSocketName), FVector(1.0f), EAttachLocation::KeepWorldPosition);
+
 	SpawnProjectile(ProjectileClass);
 }
 
@@ -182,7 +188,7 @@ void ASCharacter::UltimateAttack()
 
 void ASCharacter::UltimateAttack_TimeElapsed()
 {
-
+	UGameplayStatics::SpawnEmitterAttached(CastUltVFX, GetMesh(), NAME_None, GetMesh()->GetSocketLocation(HandSocketName), GetMesh()->GetSocketRotation(HandSocketName), FVector(1.0f), EAttachLocation::KeepWorldPosition);
 	SpawnProjectile(UltimateClass);
 }
 
@@ -200,8 +206,9 @@ void ASCharacter::TeleportAttack()
 
 void ASCharacter::TeleportAttack_TimeElapsed()
 {
+	UGameplayStatics::SpawnEmitterAttached(PortalVFX,GetMesh(),NAME_None, GetMesh()->GetSocketLocation(PelvisSocketName), GetMesh()->GetSocketRotation(PelvisSocketName), FVector(1.0f), EAttachLocation::KeepWorldPosition);
+	//UGameplayStatics::SpawnEmitterAtLocation(this, PortalVFX, GetActorLocation(), GetActorRotation());
 
-	UGameplayStatics::SpawnEmitterAtLocation(this, ImpactVFX, GetActorLocation(), GetActorRotation());
 	SpawnProjectile(ProjectileTPClass);
 }
 
@@ -250,6 +257,17 @@ void ASCharacter::PrimaryInteract()
 
 void ASCharacter::OnHealthChanged(AActor* InstigatorActor, USAttributeComponent* OwningComp, float NewHealth, float Delta)
 {
+	if (Delta < 0.0f)
+	{
+		GetMesh()->SetVectorParameterValueOnMaterials("HitFlashColor", Damage);
+	}
+	else
+	{
+		GetMesh()->SetVectorParameterValueOnMaterials("HitFlashColor", Heal);
+	}
+
+	GetMesh()->SetScalarParameterValueOnMaterials("TimeToHit", GetWorld()->TimeSeconds);
+	
 
 	if (NewHealth <= 0.0f && Delta < 0.0f)
 	{
